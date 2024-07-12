@@ -36,7 +36,7 @@ export const NotificationMassage = ({ text, type, duration = 3000, id }: INotifi
       initial={{ opacity: 0, y: 40, filter: 'blur(24px)' }}
     >
       <Button
-        className=' w-96 h-min py-2 !text-white mb-2 data-[hover=true]:opacity-100 border-box px-4 text-wrap leading-5'
+        className=' w-96 h-min p-4 !text-white mb-2 data-[hover=true]:opacity-100 border-box text-wrap leading-5'
         color={type}
         variant='shadow'
         onPress={close}

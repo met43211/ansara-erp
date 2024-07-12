@@ -3,7 +3,6 @@ export const AnsaraTitle = () => {
     <svg
       className='fill-foreground'
       fill='none'
-      height='auto'
       viewBox='0 0 615 116'
       width='100%'
       xmlns='http://www.w3.org/2000/svg'

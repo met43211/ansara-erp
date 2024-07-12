@@ -4,12 +4,16 @@ import { Input } from '@nextui-org/input';
 import { FormEventHandler, useState } from 'react';
 import { PiCaretLeftBold, PiCaretRightBold } from 'react-icons/pi';
 import { AnimatePresence, m } from 'framer-motion';
-import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+
+import { Auth } from '../api/auth';
+import { TAuthData } from '../model/auth-data.type';
 
 import { PasswordInput } from '@/src/shared/ui/(inputs)/password-input';
 import { Flex } from '@/src/shared/ui/(layout)/flex';
 import { Button } from '@/src/shared/ui/(buttons)/button';
 import { useNotification } from '@/src/shared/ui/notification/model/notification-store';
+import { TTokens, useAuth } from '@/src/shared/lib/providers/auth-provider';
 
 export const LoginForm = () => {
   const [phase, setPhase] = useState('login');
@@ -17,7 +21,17 @@ export const LoginForm = () => {
   const [password, setPassword] = useState('');
   const { addNotification } = useNotification();
   const [from, setFrom] = useState('');
-  const router = useRouter();
+  const { logIn } = useAuth();
+
+  const auth = useMutation({
+    mutationFn: (authData: TAuthData) => Auth(authData),
+    onSuccess: (res: TTokens) => {
+      logIn(res);
+    },
+    onError: (err) => {
+      addNotification({ text: err.message, type: 'danger' });
+    },
+  });
 
   const toPassword = () => {
     if (login.length > 3) {
@@ -34,7 +48,7 @@ export const LoginForm = () => {
       toPassword();
     } else {
       if (password.length > 3) {
-        router.push('/');
+        auth.mutate({ username: login, password });
       } else {
         addNotification({ text: 'Слишком короткий пароль', type: 'danger' });
       }
@@ -97,7 +111,13 @@ export const LoginForm = () => {
               >
                 <PiCaretLeftBold size={20} />
               </Button>
-              <Button fullWidth color='primary' type='submit' variant='shadow'>
+              <Button
+                fullWidth
+                color='primary'
+                isDisabled={auth.isPending}
+                type='submit'
+                variant='shadow'
+              >
                 Авторизоваться
               </Button>
             </Flex>

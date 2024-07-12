@@ -1,5 +1,6 @@
 import { Input } from '@nextui-org/input';
 import UseKey from 'react-use/lib/component/UseKey';
+import { useEffect, useState } from 'react';
 
 import { useAddProject } from '../../model/add-project-store';
 
@@ -9,6 +10,7 @@ import { CurrencyInput } from '@/src/shared/ui/(inputs)/currency-input';
 import { SelectInput } from '@/src/shared/ui/(inputs)/select-input';
 import { PasswordInput } from '@/src/shared/ui/(inputs)/password-input';
 import { DatePickerInput } from '@/src/shared/ui/(inputs)/date-picker';
+import { useUsers } from '@/src/shared/lib/providers/users-provider/model/users-store';
 
 type Props = {
   actionFunc: VoidFunction;
@@ -29,6 +31,18 @@ export const AddProjectForm = ({ actionFunc }: Props) => {
     setEndDate,
     setStages,
   } = useAddProject();
+  const { users } = useUsers();
+  const [accauntersState, setAccauntersState] = useState<{ id: number; title: string }[]>([]);
+
+  useEffect(() => {
+    if (users.length) {
+      const accaunters = users
+        .filter((user) => user.role === 'accounter')
+        .map((accouter) => ({ id: accouter.id, title: accouter.username }));
+
+      setAccauntersState(accaunters);
+    }
+  }, [users]);
 
   return (
     <form autoComplete='off' className='grid grid-cols-2 gap-4 gap-y-6 mt-2'>
@@ -82,6 +96,8 @@ export const AddProjectForm = ({ actionFunc }: Props) => {
           variants={[
             { id: '1', title: '1' },
             { id: '2', title: '2' },
+            { id: '3', title: '3' },
+            { id: '4', title: '4' },
           ]}
           onSelectionChange={(keys) => setStages(keys)}
         />
@@ -91,10 +107,7 @@ export const AddProjectForm = ({ actionFunc }: Props) => {
         <SelectInput
           selectedVariants={project.accounters}
           size='lg'
-          variants={[
-            { id: '1', title: 'Арина' },
-            { id: '2', title: 'Алексей' },
-          ]}
+          variants={accauntersState}
           onSelectionChange={(keys) => setAccounters(keys)}
         />
       </InputLabel>

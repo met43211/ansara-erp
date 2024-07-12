@@ -4,9 +4,14 @@ import { useEffect, useState } from 'react';
 import { Flex } from '@/src/shared/ui/(layout)/flex';
 import { CurrencyInput } from '@/src/shared/ui/(inputs)/currency-input';
 
-export const Payment = () => {
-  const [payed, setPayed] = useState(0);
-  const [needPay, setNeedPay] = useState(0);
+type Props = {
+  payedValue: number;
+  remainedValue: number;
+};
+
+export const Payment = ({ payedValue, remainedValue }: Props) => {
+  const [payed, setPayed] = useState(payedValue);
+  const [needPay, setNeedPay] = useState(remainedValue);
 
   const [progress, setProgress] = useState(100);
 

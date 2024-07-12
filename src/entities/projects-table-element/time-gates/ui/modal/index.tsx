@@ -10,10 +10,12 @@ import { InputLabel } from '@/src/shared/ui/(inputs)/input-label';
 import { ModalWrapper } from '@/src/shared/ui/modal';
 import { useNotification } from '@/src/shared/ui/notification/model/notification-store';
 
-export const ProjectTasksTimeGatesModal = () => {
-  const [payDate, setPayDate] = useState<Date | DateValue>(new Date());
-  const [startDate, setStartDate] = useState<Date | DateValue>(new Date());
-  const [endDate, setEndDate] = useState<Date | DateValue>(new Date());
+type Props = { pay: Date; start: Date; end: Date };
+
+export const ProjectTasksTimeGatesModal = ({ pay, start, end }: Props) => {
+  const [payDate, setPayDate] = useState<Date | DateValue>(pay);
+  const [startDate, setStartDate] = useState<Date | DateValue>(start);
+  const [endDate, setEndDate] = useState<Date | DateValue>(end);
 
   const { addNotification } = useNotification();
 
